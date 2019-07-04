@@ -86,7 +86,7 @@ public class loginController {
 		
 		model.addAttribute("categoryList", productService.showCategory());
 		
-		return "productForm";
+		return "createProductForm";
 	}
 	
 	@PostMapping("/update/{id}")
