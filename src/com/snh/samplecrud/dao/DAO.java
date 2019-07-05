@@ -26,7 +26,6 @@ public class DAO {
 	private SessionFactory sessionFactory;
 	
 	private Session getSession(){
-		System.out.println("Session factory"+sessionFactory);
 		Session s;
 		try {
 			s=sessionFactory.getCurrentSession();
@@ -45,6 +44,12 @@ public class DAO {
 		
 	}
 	
+	public void insertCategory(Category category){
+		
+		getSession().save(category);
+		
+	}
+	
 	public List<Productpo> showAll(){
 		
 		List<Product> productList =getSession().createCriteria(Product.class).list();
@@ -55,7 +60,7 @@ public class DAO {
 			Productpo po = new Productpo(p.getId(), p.getName(), p.getQuantity(), p.getPrice(), p.getCategory().getId(), p.getCategory().getName());
 			productpoList.add(po);
 		}
-		System.out.println(productpoList);
+		//System.out.println(productpoList);
 		return productpoList;
 	}
 	
@@ -101,6 +106,11 @@ public class DAO {
 		Category category = (Category) cr.uniqueResult();
 		
 		return category;
+	}
+	
+	public void updateCategory(Category c){
+		getSession().update(c);
+		
 	}
 
 }

@@ -12,8 +12,35 @@
 <title>Insert title here</title>
 </head>
 <body>
-
 	<div class="container">
+	
+		<div class="col-md-12" style="padding-top: 20px; padding-bottom: 20px;">
+			<div class="row">
+				<div class="col-md-3">
+					<a th:href="@{/productForm}" class="btn btn-primary">Add product</a>
+				</div>
+				
+				<div class="col-md-3">
+					<a th:href="@{/category-list}" class="btn btn-primary">Show category</a>
+				</div>
+				
+				<div class="col-md-3">
+					<button type="button" class="btn btn-primary" id="btn" name="btn" >Add category</button>
+				</div>
+				
+				<div class="col-md-3" id="div" style="display: none;">
+					<form action="#" th:action="@{/category}" method="post" th:object="${category}">
+						<div class="row">
+							<div class="col-md-8"><input type="text" th:field="*{name}" id="name" style="width: 150px;" placeholder="add category" class="form-control" required/></div>
+							<div class="col-md-4"><input type="submit" class="btn btn-primary" value="submit" style="padding-left: 10px; "/></div>
+						</div>
+					</form>
+				</div>
+				
+				
+			</div>
+		</div>
+
 		
 		<table class="table table-striped">
 			<thead>
@@ -46,3 +73,14 @@
 
 </body>
 </html>
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+	    $("#btn").click(function () {
+	        $("#div").toggle();
+	
+	    });
+	});
+	
+</script>

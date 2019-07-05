@@ -19,6 +19,11 @@ public class ProductService {
 	public void insertProduct(Product p, int categoryId){
 		dao.insertProduct(p, categoryId);
 	}
+	
+	public void insertCategory(Category category){
+		dao.insertCategory(category);
+		
+	}
 
 	public List<Productpo> showAll(){
 		
@@ -50,5 +55,9 @@ public class ProductService {
 	
 	public Category categoryFindById(int id){
 		return dao.categoryFindById(id);
+	}
+	
+	public void updateCategory(Category c){
+		dao.updateCategory(c);
 	}
 }

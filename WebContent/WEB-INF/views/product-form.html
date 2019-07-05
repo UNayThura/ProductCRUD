@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<title>Insert title here</title>
+</head>
+<body>
+	
+	<div class="container" style="padding-top: 100px;">
+	<div><a th:href="@{/product-list}" class="btn btn-primary">Back</a></div>
+	
+	<form method="post" th:action="@{/submitProduct}" th:object="${productpo}" class="form-group" >
+		
+		
+		<input class="form-control" type="hidden" th:field="*{id}" id="id" />
+		
+		<p><label>Name:</label>
+		<input class="form-control" th:field="*{name}" id="name" />
+		<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
+		</p>
+		 
+		
+		<p><label>Quantity:</label>
+		<input class="form-control" type="number" th:field="*{quantity}" id="quantity" />
+		<span th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}" class="text-danger"></span>
+		</p>
+		
+		<p><label>Price:</label>
+		<input class="form-control" type="number" step="any" th:field="*{price}" id="price" />
+		<span th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger"></span>
+		</p>
+		
+		<p><label>Select Category:</label>
+			<select th:field="*{categoryId}" class="form-control" style="width: 150px;">
+				<option value="0">Select category</option>
+				<option th:each="category : ${categoryList}" th:value="${category.id}" th:utext="${category.name}"><button class="btn btn-primary" >test</button></option>
+			</select></p>
+			
+		<div th:switch="${value}">
+			<p th:case="'create'"><input type="submit" class="btn btn-primary" value="create"/></p>
+			<p th:case="'edit'"><input type="submit" class="btn btn-primary" value="update"/></p>
+		</div>
+	</form>
+	</div>
+</body>
+</html>
