@@ -40,8 +40,9 @@
 		<p><label>Select Category:</label>
 			<select th:field="*{categoryId}" class="form-control" style="width: 150px;">
 				<option value="0">Select category</option>
-				<option th:each="category : ${categoryList}" th:value="${category.id}" th:utext="${category.name}"><button class="btn btn-primary" >test</button></option>
-			</select></p>
+				<option th:each="category : ${categoryList}" th:value="${category.id}" th:utext="${category.name}"></option>
+			</select><span th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}" class="text-danger"></span>
+			</p>
 			
 		<div th:switch="${value}">
 			<p th:case="'create'"><input type="submit" class="btn btn-primary" value="create"/></p>

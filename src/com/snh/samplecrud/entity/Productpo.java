@@ -1,7 +1,7 @@
 package com.snh.samplecrud.entity;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
+
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -15,6 +15,7 @@ public class Productpo {
 	private int quantity;
 	@Min(value = 0, message = "Quantity should not be less than 0")
 	private double price;
+	@Min(value = 1 , message= "Select category name")
 	private int categoryId;
 	private String categoryName;
 

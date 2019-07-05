@@ -58,10 +58,9 @@ public class ProductController {
 
 	@PostMapping("/submitProduct")
 	public String process(@Valid @ModelAttribute Productpo po, BindingResult bindingResult,Model model) {
-		System.out.println("Reached ctrl >>>>");
+		System.out.println("Reached ctrl >>>>"+po.toString());
 		
 		if (bindingResult.hasErrors()) {
-			System.out.println("error");
 
 			model.addAttribute("categoryList", productService.showCategory());
 			model.addAttribute("value", "create");
@@ -103,7 +102,7 @@ public class ProductController {
 	@GetMapping("/product-list")
 	public String show(Model model) {
 		
-
+		System.out.println("product List");
 		model.addAttribute("category", new Category());
 		model.addAttribute("product", productService.showAll());
 
@@ -117,7 +116,6 @@ public class ProductController {
 		Productpo productpo = new Productpo(p.getId(), p.getName(), p.getQuantity(), p.getPrice(),
 				p.getCategory().getId(), p.getCategory().getName());
 
-		System.out.println(productpo);
 
 		model.addAttribute("productpo", productpo);
 

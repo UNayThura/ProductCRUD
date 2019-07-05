@@ -59,8 +59,9 @@ public class DAO {
 			Product p = (Product) obj;
 			Productpo po = new Productpo(p.getId(), p.getName(), p.getQuantity(), p.getPrice(), p.getCategory().getId(), p.getCategory().getName());
 			productpoList.add(po);
+			
 		}
-		//System.out.println(productpoList);
+	
 		return productpoList;
 	}
 	
