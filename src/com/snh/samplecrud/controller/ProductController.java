@@ -47,18 +47,19 @@ public class ProductController {
 
 	@PostMapping("/category")
 	public String createCategory(Category category) {
-
+		System.out.println("category :" + category);
 		Category c = new Category();
 		c.setName(category.getName());
 		productService.insertCategory(category);
-
-		System.out.println(productService.showCategory());
+		
+		
 		return "redirect:/product-list";
 	}
 
 	@PostMapping("/submitProduct")
 	public String process(@Valid @ModelAttribute Productpo po, BindingResult bindingResult,Model model) {
 		System.out.println("Reached ctrl >>>>"+po.toString());
+	
 		
 		if (bindingResult.hasErrors()) {
 
@@ -102,7 +103,6 @@ public class ProductController {
 	@GetMapping("/product-list")
 	public String show(Model model) {
 		
-		System.out.println("product List");
 		model.addAttribute("category", new Category());
 		model.addAttribute("product", productService.showAll());
 

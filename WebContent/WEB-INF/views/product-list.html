@@ -32,6 +32,7 @@
 					<form action="#" th:action="@{/category}" method="post" th:object="${category}">
 						<div class="row">
 							<div class="col-md-8"><input type="text" th:field="*{name}" id="name" style="width: 150px;" placeholder="add category" class="form-control" required/></div>
+							<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
 							<div class="col-md-4"><input type="submit" class="btn btn-primary" value="submit" style="padding-left: 10px; "/></div>
 						</div>
 					</form>
