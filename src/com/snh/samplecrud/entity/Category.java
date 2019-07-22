@@ -24,6 +24,7 @@ public class Category implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 	@NotEmpty(message = "Category name may not be empty")
+	
 	private String name;
 	
 	public Category(){

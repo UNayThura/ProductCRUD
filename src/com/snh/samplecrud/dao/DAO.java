@@ -35,19 +35,20 @@ public class DAO {
 		return s;
 
 	}
-	public void insertProduct(Product p, int categoryId){
+	public Product insertProduct(Product p, String categoryName){
 		
-		p.setCategory(getId(categoryId));
-
+		p.setCategory(getCategoryName(categoryName));
 		getSession().save(p);
 
+		return p;
 		
 	}
 	
-	public void insertCategory(Category category){
+	public Category insertCategory(Category category){
 		
 		getSession().save(category);
 		
+		return category;
 	}
 	
 	public List<Productpo> showAll(){
@@ -72,10 +73,10 @@ public class DAO {
 		return categoryList;
 	}
 	
-	public Category getId(int categoryId){
+	public Category getCategoryName(String categoryName){
 		
 		Criteria cr= getSession().createCriteria(Category.class);
-		cr.add(Restrictions.eq("id", categoryId));
+		cr.add(Restrictions.eq("name", categoryName));
 		Category category = (Category) cr.uniqueResult();
 		
 		return category;
@@ -95,23 +96,24 @@ public class DAO {
 		
 	}
 	
-	public void update(Product p){
+	public Product update(Product p){
 
 		getSession().update(p);
-
+		System.out.println("product dao return obj >> " +  p.toString());
+		return p;
 	}
 	
-	public Category categoryFindById(int id){
+	public Category categoryFindByName(String categoryName){
 		Criteria cr = getSession().createCriteria(Category.class);
-		cr.add(Restrictions.eq("id", id));
+		cr.add(Restrictions.eq("name", categoryName));
 		Category category = (Category) cr.uniqueResult();
 		
 		return category;
 	}
 	
-	public void updateCategory(Category c){
+	public Category updateCategory(Category c){
 		getSession().update(c);
-		
+		return c;
 	}
 
 }

@@ -1,0 +1,34 @@
+<navbar></navbar>
+
+
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Edit</th>
+                <th></th>
+            </tr>
+            <tbody>
+                <tr ng-repeat="category in $ctrl.categoryList">
+                    <td>
+                        <span ng-show="!category.editing">{{category.name}}</span>
+                        <input ng-show="category.editing" type="text" ng-model="$ctrl.categoryName">
+                        <span ng-show="$ctrl.categoryName == '' && category.editing == true" class="text-danger"><strong>!</strong></span>
+                        <span ng-show="$ctrl.duplicateName == 400 && category.editing == true" class="text-danger"><strong>Duplicate Name</strong></span>
+                    </td>
+                    <td>
+                        <input ng-show="!category.editing" class="btn btn-info" type="submit" value="Edit" ng-click="$ctrl.edit(category.id);category.editing=true">
+                        <span>
+                            <input ng-show="category.editing" class="btn btn-default" type="submit" value="Cancle" ng-click="$ctrl.cancle(category.id)">
+                        </span>
+                    </td>
+                    <td>
+                        <input ng-show="category.editing" class="btn btn-success" type="submit" value="Save" ng-click="$ctrl.save(category.id, $index)">
+                       
+                    </td>
+                </tr>
+            </tbody>
+        </thead>
+    </table>
+</div>

@@ -1,8 +1,13 @@
 package com.snh.samplecrud.controller;
 
+import java.io.File;
+import java.sql.SQLException;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,7 +16,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.snh.samplecrud.entity.Category;
 import com.snh.samplecrud.entity.Product;
 import com.snh.samplecrud.entity.Productpo;
@@ -28,139 +37,109 @@ public class ProductController {
 	@Autowired
 	ProductService productService;
 
-	@GetMapping("/")
-	public String welcome(Model model) {
+	@PostMapping("/productForm")
+	public ResponseEntity<String> createProduct(@RequestBody Productpo p) {
 
-		return "redirect:/product-list";
-	}
-
-	@GetMapping("/productForm")
-	public String createProduct(Model model) {
-
-		model.addAttribute("productpo", new Productpo());
-
-		model.addAttribute("categoryList", productService.showCategory());
-		model.addAttribute("value", "create");
-
-		return "product-form";
+		Product product = new Product(p.getName(), p.getQuantity(), p.getPrice());
+		Product insertp = productService.insertProduct(product, p.getCategoryName());
+		Gson gson = new Gson();
+		String str = gson.toJson(insertp);
+		
+		return new ResponseEntity<String>(str, HttpStatus.OK);
+		
 	}
 
 	@PostMapping("/category")
-	public String createCategory(Category category) {
-		System.out.println("category :" + category);
-		Category c = new Category();
-		c.setName(category.getName());
-		productService.insertCategory(category);
+	public ResponseEntity<String> createCategory(@RequestBody String categoryName) {
 		
+		Category category = new Category();
+		category.setName(categoryName);
+		Category c = productService.insertCategory(category);
 		
-		return "redirect:/product-list";
+		Gson gson =  new Gson();
+		String str = gson.toJson(c);
+		
+		return new ResponseEntity<String>(str, HttpStatus.OK);
 	}
 
 	@PostMapping("/submitProduct")
-	public String process(@Valid @ModelAttribute Productpo po, BindingResult bindingResult,Model model) {
-		System.out.println("Reached ctrl >>>>"+po.toString());
+	public ResponseEntity<String> process(@Valid @RequestBody Productpo po, BindingResult bindingResult,Model model) {
 	
+		Product product = new Product();
+		product.setId(po.getId());
+		product.setName(po.getName());
+		product.setQuantity(po.getQuantity());
+		product.setPrice(po.getPrice());
+	
+		Category category = productService.categoryFindByName(po.getCategoryName());
+		category.setName(po.getCategoryName());
+
+		product.setCategory(category);
+		Product updatedProduct=productService.update(product);
+		Gson gson = new Gson();
+		String str = gson.toJson(updatedProduct);
 		
-		if (bindingResult.hasErrors()) {
-
-			model.addAttribute("categoryList", productService.showCategory());
-			model.addAttribute("value", "create");
-			return "product-form";
-		}else{
-
-			if (po.getId() == 0) {
-				
-				Product product = new Product();
-				product.setName(po.getName());
-				product.setQuantity(po.getQuantity());
-				product.setPrice(po.getPrice());
-				int categoryId = po.getCategoryId();
-	
-				System.out.println("Product : " + po.toString());
-				productService.insertProduct(product, categoryId);
-	
-				return "redirect:/product-list";
-			} else {
-	
-				Product product = new Product();
-				product.setId(po.getId());
-				product.setName(po.getName());
-				product.setQuantity(po.getQuantity());
-				product.setPrice(po.getPrice());
-	
-				Category category = productService.categoryFindById(po.getCategoryId());
-	
-				product.setCategory(category);
-	
-				productService.update(product);
-	
-				return "redirect:/product-list";
-			}
-		}
-
+		return new ResponseEntity<String>(str,HttpStatus.OK);
 	}
 
 	@GetMapping("/product-list")
-	public String show(Model model) {
+	public ResponseEntity<String> show() {
+	
+		Gson gson = new Gson();
 		
-		model.addAttribute("category", new Category());
-		model.addAttribute("product", productService.showAll());
-
-		return "product-list";
-	}
-
-	@GetMapping("/edit/{id}")
-	public String showUpdateForm(@PathVariable("id") int id, Model model) {
-
-		Product p = productService.findById(id);
-		Productpo productpo = new Productpo(p.getId(), p.getName(), p.getQuantity(), p.getPrice(),
-				p.getCategory().getId(), p.getCategory().getName());
-
-
-		model.addAttribute("productpo", productpo);
-
-		model.addAttribute("categoryList", productService.showCategory());
-
-		model.addAttribute("value", "edit");
-
-		return "product-form";
+		String json = gson.toJson(productService.showAll());
+		
+		return new ResponseEntity<String>(json, HttpStatus.OK);
+		
 	}
 
 	@GetMapping("/delete/{id}")
-	public String deleteProduct(@PathVariable("id") int id, Model model) {
-		
+	public void deleteProduct(@PathVariable("id") int id) {
+		System.out.println("delete method >>> ");
 		Product product = productService.findById(id);
 
 		productService.delete(product);
-		model.addAttribute("category", new Category());
-		model.addAttribute("product", productService.showAll());
-
-		return "product-list";
+		
 	}
 
 	@GetMapping("/category-list")
-	public String showCategoryList(Model model) {
-
-		
-		model.addAttribute("categoryList", productService.showCategory());
-
-		return "category-list";
-	}
+	public ResponseEntity<String> showCategoryList() {
+		System.out.println("CategoryList");
 	
-	@GetMapping("/editcategory/{id}")
-	public String editCategory(@PathVariable("id") int id, Model model){
-		System.out.println("edit category >>>>");
-		model.addAttribute("category", productService.categoryFindById(id));
+		Gson gson = new Gson();
 		
-		return "category-edit";
-	}
+		String json = gson.toJson(productService.showCategory());
+		
+		return new ResponseEntity<String>(json, HttpStatus.OK);
 	
+	}
+
+	
+//	@GetMapping("/editcategory/{id}")
+//	public String editCategory(@PathVariable("id") int id, Model model){
+//		System.out.println("edit category >>>>");
+//		model.addAttribute("category", productService.categoryFindById(id));
+//		
+//		return "category-edit";
+//	}
+//	
 	@PostMapping("/updatecategory")
-	public String updateCategory(Category c){
+	public ResponseEntity<String> updateCategory(@RequestBody Category c){
 		
-		productService.updateCategory(c);
+		System.out.println("Update category" + c.toString());
 		
-		return "redirect:/product-list";
+		Category category;
+		try {
+			category = productService.updateCategory(c);
+			Gson gson = new Gson();
+			String str = gson.toJson(category);
+			
+			return new ResponseEntity<String> ( str, HttpStatus.OK);
+		} catch (SQLException e) {
+			return new ResponseEntity<String> (HttpStatus.BAD_REQUEST);
+		}
+		
+		
 	}
 	
 }

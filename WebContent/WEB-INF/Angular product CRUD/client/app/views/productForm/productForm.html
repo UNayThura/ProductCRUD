@@ -1,0 +1,31 @@
+<navbar></navbar>
+<h1>{{ $ctrl.name }}</h1>
+
+<div class="form-group container">
+  <form name="productForm" ng-submit="$ctrl.submit()">
+    <label>Name:</label>
+    <input type="text" class="form-control" name="productName" ng-model="$ctrl.productName" required/>
+    <label>Quantity:</label>
+    <input type="number" class="form-control" name="productQuantity" ng-model="$ctrl.productQuantity" min="0" required/>
+    <label>Price:</label>
+    <input type="number" class="form-control" ng-model="$ctrl.productPrice" min="50" required/>
+    <label>Choose category:</label>
+    <select class="form-control" ng-model="$ctrl.categoryName" name="categoryName" required>
+      <option ng-repeat="name in $ctrl.categoryList track by $index" value="{{name.name}}">{{name.name}}</option>
+    </select>
+    <p ng-if="productForm.categoryName.$invalid" class="text-danger">Please select option</p>
+    <input type="submit" class="btn btn-default mt-3" value="Add">
+  </form>
+
+  <form ng-submit="$ctrl.createCategory()" class="form-group">
+    <div class="row mt-5">
+      <div class="col-md-3">
+        <input class="form-control" type="text" ng-model="$ctrl.newCategoryName" required>
+        <p ng-show="$ctrl.length == 1 " class="text-danger ">Duplicate name</p>
+      </div>
+      <div class="col-md-3">
+        <input class="btn btn-default" type="submit" value="create Category" >
+      </div>
+  </div>
+  </form>
+</div>

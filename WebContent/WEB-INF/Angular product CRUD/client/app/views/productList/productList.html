@@ -1,0 +1,68 @@
+<navbar></navbar>
+<header>
+</header>
+<main>
+
+<div class="row mt-3 mb-3">
+  <div class="col-md-3">
+    <a href="http://localhost:3000/productForm" class="btn btn-default">Add new product</a>
+  </div>
+  <div class="col-md-3">
+    <input class="form-control mr-sm-2" ng-model="$ctrl.searchVal" type="search" placeholder="Search" aria-label="Search">
+  </div>
+  <div class="col-md-3 mt-2" ng-show="$ctrl.searchVal != ''">
+      <span class="text-danger"><button ng-click="$ctrl.clear()"><strong>x</strong></button></span>
+  </div>
+</div>
+
+<div class="container">
+  <table class="table table-striped" >
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Category</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="product in $ctrl.productList | filter: { name: $ctrl.searchVal }">
+        <td>
+          <span ng-show="!product.editing">{{product.name}}</span>
+          <input ng-show="product.editing" type="text" ng-model="$ctrl.productName"/>
+          <span ng-show="$ctrl.productName == '' && product.editing == true" class="text-danger"><strong>!</strong></span>
+        </td>
+        <td>
+          <span ng-show="!product.editing">{{product.quantity}}</span>
+          <input ng-show="product.editing" type="number" ng-model="$ctrl.productQuantity" />
+          <span ng-show="$ctrl.productQuantity < 0 && product.editing == true" class="text-danger"><strong>!</strong></span>
+        </td>
+        <td>
+          <span ng-show="!product.editing">{{product.price}}</span>
+          <input ng-show="product.editing" type="number" ng-model="$ctrl.productPrice"/>
+          <span ng-show="$ctrl.productPrice < 50 && product.editing == true" class="text-danger"><strong>!</strong></span>
+        </td>
+        <td>
+          <span ng-show="!product.editing">{{product.categoryName}}</span>
+          <!-- <input ng-show="product.editing" ng-model="$ctrl.productCategoryName" /> -->
+          <select ng-show="product.editing" ng-model="product.categoryName">
+              <option ng-repeat="category in $ctrl.categoryList track by $index" value="{{category.name}}" ng-selected="category.id ==  product.categoryId ? 'selected' : ''">{{category.name}}</option>
+            </select>
+        </td>
+        
+        <td>
+          <input type="submit" class="btn btn-info" ng-click="$ctrl.editProduct(product.id); product.editing=true" value="Edit" ng-hide="product.editing" />
+          <input type="submit" class="btn btn-info" ng-click="$ctrl.saveProduct(product.id, $index)" value="Save" ng-show="product.editing"  />
+        </td>
+        <td>
+          <input type="submit" class="btn btn-danger" ng-click="$ctrl.deleteProduct(product.id)" value="Delete" ng-hide="product.editing"/>
+          <input type="submit" class="btn btn-danger" ng-click="$ctrl.cancelProduct(product.id); product.editing=false" value="Cancel" ng-show="product.editing"/>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</main>

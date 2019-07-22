@@ -1,5 +1,6 @@
 package com.snh.samplecrud.services;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,23 @@ public class ProductService {
 	@Autowired
 	private DAO dao;
 	
-	public void insertProduct(Product p, int categoryId){
-		dao.insertProduct(p, categoryId);
+	public Product insertProduct(Product p, String categoryName){
+		try{
+			dao.insertProduct(p, categoryName);
+		}catch (Exception e) {
+			System.out.println("insert product error");
+		}
+		return p;
 	}
 	
-	public void insertCategory(Category category){
-		dao.insertCategory(category);
+	public Category insertCategory(Category category){
+		
+		try{
+			dao.insertCategory(category);
+		}catch (Exception e) {
+			System.out.println("insert product error");
+		}
+		return category;
 		
 	}
 
@@ -35,8 +47,8 @@ public class ProductService {
 		return dao.showCategory();
 	}
 	
-	public void getId(int categoryId){
-		dao.getId(categoryId);
+	public void getCategoryName(String categoryName){
+		dao.getCategoryName(categoryName);
 	}
 	
 	public Product findById(int id){
@@ -49,15 +61,31 @@ public class ProductService {
 		dao.delete(delProduct);
 	}
 	
-	public void update(Product p){
-		dao.update(p);
+	public Product update(Product p){
+		try{
+			dao.update(p);
+			System.out.println("product work");
+		}catch(Exception e){
+			System.out.println("Exception >> " + "product update error");
+		}
+		System.out.println("product service return obj >> " + p.toString());
+		return p;
 	}
 	
-	public Category categoryFindById(int id){
-		return dao.categoryFindById(id);
+	public Category categoryFindByName(String categoryName){
+		return dao.categoryFindByName(categoryName);
 	}
 	
-	public void updateCategory(Category c){
-		dao.updateCategory(c);
+	public Category updateCategory(Category c) throws SQLException{
+		try{
+			dao.updateCategory(c);
+			System.out.println("product work");
+			System.out.println("category service return obj >> " + c.toString());
+			return c;
+		}catch(Exception e){
+			System.out.println("Exception >> " + "category update error");
+			throw new SQLException(e);
+		}
+		
 	}
 }
