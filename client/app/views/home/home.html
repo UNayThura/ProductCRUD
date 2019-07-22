@@ -1,0 +1,62 @@
+<navbar></navbar>
+<header>
+</header>
+<main>
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#status" role="tab" aria-controls="home"
+        aria-selected="true">Status</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#checklist" role="tab" aria-controls="profile"
+        aria-selected="false">Checklist</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="contact-tab" data-toggle="tab" href="#application" role="tab" aria-controls="contact"
+        aria-selected="false">Application</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="contact-tab" data-toggle="tab" href="#attachment" role="tab" aria-controls="contact"
+        aria-selected="false">Attachment</a>
+    </li>
+  </ul>
+
+  <div class="form-group container mt-5">
+    <div class="row">
+    <div class="col-md-8">
+      <input class="form-control" type="text" value="" ng-model="$ctrl.task"/>
+    </div>
+    <div class="col-md-4">
+      <span><input type="submit" ng-click="$ctrl.add()" value="Add" class="btn btn-success"/></span>
+    </div>
+  </div>
+  </div>
+
+  <div class="mt-5">
+  <ul>
+    <li ng-repeat="t in $ctrl.taskList track by $index" >
+      <div class="row">
+      <div class="col-md-4">
+        <input  type="checkbox" ng-click='$ctrl.toggleComplete(t.id)' ng-checked='t.completed' >
+
+
+      <span ng-class="{'test' : t.completed  == true}" ng-show = "!t.editing" >{{t.title}}</span>
+      <input type="text" ng-show="t.editing" ng-value="t.title" ng-model="$ctrl.saveText">
+    </div>  
+    <div class="col-md-2">
+        <input type="submit" ng-click="$ctrl.cancel(t.id); t.editing = false" ng-show="t.editing" class="btn btn-default" value="cancel">
+      </div>
+      <div class="col-md-2">
+          <input type="submit" ng-click="$ctrl.save(t.id); t.editing = false" ng-show='t.editing' class="btn btn-success" value="save">
+        </div>
+    <div class="col-md-2">
+      <input type="submit" ng-click="$ctrl.delete(t.id)" class="btn btn-danger" value="x">
+    </div>
+    <div class="col-md-2">
+        <input type="submit" ng-click="$ctrl.edit(t.id)"  class="btn btn-default" value="Edit">
+    </div>
+  </div>
+    </li>
+  </ul>
+</div>
+</main>
